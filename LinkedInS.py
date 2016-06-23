@@ -106,10 +106,13 @@ def search():
 			checkurl1=b.search(url)
 			s=int(input("\nStart Page: "))
 			e=int(input("End Page: "))
-			if checkurl.group() in url:
-				url = url.replace(checkurl.group(), '')
-			elif checkurl1.group() in url:
-				url = url.replace(checkurl1.group(), '')
+			try:
+				if checkurl.group() in url:
+					url = url.replace(checkurl.group(), '')
+				elif checkurl1.group() in url:
+					url = url.replace(checkurl1.group(), '')
+			except:
+				break
 			break
 		except:
 			print("\nInvaild Input... Try again")
