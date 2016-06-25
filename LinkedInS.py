@@ -79,16 +79,14 @@ def crawl(curr,max_page,url):
 		  		print("Page: "+str(page))
 		  		print("Scarping...\n")
 		  		start=timeit.default_timer()
-		  		url_links =[]
 		  		for i in range(1,11):
 		  			links = browser.find_elements_by_xpath("""//*[@id="results"]/li["""+str(i)+"""]/div/h3/a""")
 			  		for link in links:
-			  			url_links.append(link.get_attribute('href'))
-			  			scrape(url_links[i-1])
-			  	estimate=timeit.default_timer() - start
+			  			scrape(link.get_attribute('href'))
 			  	print("\n\n[+]Scarping Page "+str(page)+" Completed\n")
 			  	page+=1
-			  	print("Estimated Time: "+ str(round(estimate,3)))
+			estimate=timeit.default_timer() - start
+			print("Estimated Time: "+ str(round(estimate,3)))
 			write(name,0, location, 1, size, 2, industry, 3)
 			print("Success!")
 			input()
