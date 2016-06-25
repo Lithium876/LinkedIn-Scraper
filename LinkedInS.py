@@ -100,17 +100,18 @@ def login(email,passwrd):
 	browser=webdriver.PhantomJS("C:\Program Files (x86)\phantomjs-2.1.1-windows\phantomjs-2.1.1-windows\\bin\phantomjs.exe")
 	browser.set_window_size(1024, 768)
 	browser.implicitly_wait(600)
-	browser.get("https://linkedin.com/uas/login")
-	try:
-		browser.find_element_by_id("session_key-login").send_keys(email + Keys.TAB)
-		browser.find_element_by_id("session_password-login").send_keys(passwrd + Keys.RETURN)
+	browser.get("https://linkedin.com/uas/login")	
+	browser.find_element_by_id("session_key-login").send_keys(email + Keys.TAB)
+	browser.find_element_by_id("session_password-login").send_keys(passwrd + Keys.RETURN)
+	time.sleep(1)
+	if browser.current_url == "https://www.linkedin.com/uas/login":
+		print("[-] Error In Login, Incorrect Email or Password\n")
+		Main()
+	else:
 		print("\n[+] Success! Logged In, Bot Starting!")
 		time.sleep(1)
 		os.system('cls')
-		search()
-	except:
-		print("[-] Error In Login, Incorrect Email or Password")
-		Main()
+		search()	
 	
 def search():
 	while True:
