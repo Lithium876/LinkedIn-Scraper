@@ -17,6 +17,7 @@ system("title "+"LinkedIn Bot")
 
 a = re.compile('&page_num=\d+')
 b = re.compile('&page_num=\d+&')
+c = '+ employees'
 
 def write(name,col1, location, col2, size, col3, industry, col4):
     file=input("\nEnter file name: ")
@@ -58,15 +59,19 @@ def scrape(url):
 		print("Error")
 	try:	
 		location1 = new_tab.find_element_by_xpath("""//*[@id="stream-about-section"]/div[2]/div[2]/ul/li[4]/p""")
-		location.append(location1.text)
+		if c in location1.text:
+			location.append("n/a")
+		else:
+			location.append(location1.text)
 	except:
-		location.append("n/a")
 		print("Error")
 	try:	
 		size1 = new_tab.find_element_by_xpath("""//*[@id="stream-about-section"]/div[2]/div[2]/ul/li[5]/p""")
-		size.append(size1.text)
+		if c not in size1.text:
+			size.append("n/a")
+		else:
+			size.append(size1.text)
 	except:
-		size.append("n/a")
 		print("Error")
 
 def crawl(curr,max_page,url):
