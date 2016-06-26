@@ -1,7 +1,7 @@
 import timeit, time, os, re
+from tkinter import *
 from os import system
 from selenium import webdriver
-from easygui import passwordbox
 from xlwt import Workbook
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -94,29 +94,11 @@ def crawl(curr,max_page,url):
 		except:
 			print("Something went wrong, try again")
 			search()
-
-def login(email,passwrd):
-	global browser 
-	browser=webdriver.PhantomJS("C:\Program Files (x86)\phantomjs-2.1.1-windows\phantomjs-2.1.1-windows\\bin\phantomjs.exe")
-	browser.set_window_size(1024, 768)
-	browser.implicitly_wait(600)
-	browser.get("https://linkedin.com/uas/login")	
-	browser.find_element_by_id("session_key-login").send_keys(email + Keys.TAB)
-	browser.find_element_by_id("session_password-login").send_keys(passwrd + Keys.RETURN)
-	time.sleep(1)
-	if browser.current_url == "https://www.linkedin.com/uas/login":
-		print("[-] Error In Login, Incorrect Email or Password\n")
-		Main()
-	else:
-		print("\n[+] Success! Logged In, Bot Starting!")
-		time.sleep(1)
-		os.system('cls')
-		search()	
 	
 def search():
+	url=GetURL.get()
 	while True:
 		try:
-			url=input("Enter URL: ")
 			checkurl=a.search(url)
 			checkurl1=b.search(url)
 			s=int(input("\nStart Page: "))
@@ -133,12 +115,85 @@ def search():
 			print("\nInvaild Input... Try again")
 			time.sleep(2)
 	browser.get(url)
+	urlWin.destroy()
 	crawl(s,e,url)
 
+def login():
+	global browser 
+	browser=webdriver.PhantomJS("C:\Program Files (x86)\phantomjs-2.1.1-windows\phantomjs-2.1.1-windows\\bin\phantomjs.exe")
+	browser.set_window_size(1024, 768)
+	browser.implicitly_wait(600)
+	browser.get("https://linkedin.com/uas/login")	
+	browser.find_element_by_id("session_key-login").send_keys(username.get() + Keys.TAB)
+	browser.find_element_by_id("session_password-login").send_keys(password.get() + Keys.RETURN)
+	time.sleep(1)
+	if browser.current_url == "https://www.linkedin.com/uas/login":
+		print("[-] Error In Login, Incorrect Email or Password\n")
+		Main()
+	else:
+		root.destroy()
+		print("\n[+] Success! Logged In, Bot Starting!")
+		time.sleep(1)
+		os.system('cls')
+		GetURL()
+
+def GetURL():
+	print("1. Copy the link you wish to scrap from LinkedIn")
+	print("2. Use ctrl+v to paste in the URL in the box")
+	print("3. Click Search")
+	print("4. If you wish to scrape multiple pages, please\n   specify the page you wish to begin and the last\n   page you want scraped.If you only need one page")
+	print("   then use the page number for both start and end.")
+	print("\n\nNB: ONLY NUMBERS ARE ALLOWED FOR START AND END PAGE.\nWHITESPACES, LETTERS OR SYMBOLS ARE INVALID INPUT")
+	global urlWin
+	urlWin = Tk()
+	global GetURL
+	#======Initalize window=====
+	urlWin.wm_title("Search")
+	urlWin.resizable(width=False, height=False)
+	urlWin.geometry("450x60")
+	urlWin.withdraw()
+	urlWin.update_idletasks()  # Update "requested size" from geometry manager
+	x = (urlWin.winfo_screenwidth() - urlWin.winfo_reqwidth()) / 2
+	y = (urlWin.winfo_screenheight() - urlWin.winfo_reqheight()) / 2
+	urlWin.geometry("+%d+%d" % (x, y))
+	urlWin.deiconify()
+	#===========================
+	urlLabel = Label(urlWin, text="URL:")
+	urlLabel.grid(row=0, column=0, pady=3)
+	GetURL=Entry(urlWin,width=68)
+	GetURL.grid(row=0, column=1)
+	GetURLbtn=Button(urlWin,text="Search",command=search, width=20)
+	GetURLbtn.grid(columnspan=2)
+	urlWin.mainloop()
+
 def Main():
-	email = input("Email: ")
-	passwrd = passwordbox("Password: ")
-	login(email,passwrd)
+	global root
+	root = Tk()
+	print("Please enter your LinkedIn email and password")
+	global username, password
+	#======Initalize window=====
+	root.wm_title("LinkedIn Login")
+	root.iconbitmap(r'icon.ico')
+	root.resizable(width=False, height=False)
+	root.geometry("250x90")
+	root.withdraw()
+	root.update_idletasks()  # Update "requested size" from geometry manager
+	x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
+	y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
+	root.geometry("+%d+%d" % (x, y))
+	root.deiconify()
+	#===========================
+	user = Label(root, text="Email:")
+	user.grid(row=0, column=0, pady=3, sticky=E)
+	username=Entry(root,width=30)
+	username.grid(row=0, column=1)
+	passwrd=Label(root,text="Password:")
+	passwrd.grid(row=1, column=0, pady=5)
+	password=Entry(root, width=30, show="*")
+	password.grid(row=1, column=1)
+	Login=Button(root,text="Login",command=login, width=20)
+	Login.grid(columnspan=2)
+	root.mainloop()
 
 if __name__ == '__main__':
 	Main()
