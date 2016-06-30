@@ -5,6 +5,5 @@ A super simple dynamic LinkedIn scraper designed to scrap company Names, Address
 ```
 re
 selenium
-easygui
 xlwt 
 ```
